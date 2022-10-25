@@ -23,23 +23,24 @@ public class Usuario {
 	private String name;
 	private String email;
 	
-	@OneToMany (mappedBy ="usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)//, orphanRemoval = true)
-	private Set<Direccion> direcciones = new HashSet<>();
-	
-	//If the collection is defined using generics to specify the element type, 
-	// the associated target entity type need not be specified; 
-	//otherwise the target entity class must be specified. 
-	
-	//If the relationship is bidirectional, the  mappedBy element must be used to specify the relationship field 
-	//or property of the entity that is the owner of the relationship. 
-	
-	//Debo proporcionar el atributo:usuario de la entidad propietaria: Direccion.
-	//fetch= FetchType.EAGER cargamos todas las direcciones que tenga el usuario al utilizar el usuario
+	//If the relationship is bidirectional, the  mappedBy element must be used to specify  
+	//the property of the entity that is the owner of the relationship (Direccion). 	
+	//Debo proporcionar el atributo:usuario de la entidad propietaria: Direccion en mappedBy.
+	//
+	//fetch= FetchType.EAGER cargamos todas las direcciones que tenga el usuario inmediatamente. (Necesario para estos tests y ejemplo)
+	//
 	//CascadeType.ALL: Cuando una entidad es persistida, removida, refrescada o actualizada, 
 	//su entidad relacionada debe ser persistida, removida, refrescada o actualizada también.
 	
-//	@OneToMany (mappedBy ="usuario",cascade= CascadeType.ALL, fetch= FetchType.EAGER)
-//	private Set<Direccion> direcciones = new HashSet<>();	
+	//OrphanRemoval=true: Si el ciclo de vida de la entidad hija (Direccion) está vinculado 
+	//a su padre (Usuario) de manera que el hijo no puede existir sin su padre. 
+	//Entonces podemos anotar la asociación con el atributo orphanRemoval y la disociación del hijo (padre a null) 
+	//desencadenará una sentencia de eliminación en la fila de la tabla hija también
+	
+	@OneToMany (mappedBy ="usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Direccion> direcciones = new HashSet<>();
+
+	
 
 	protected Usuario() {
 		// TODO Auto-generated constructor stub
@@ -53,12 +54,13 @@ public class Usuario {
 	
 	public void addDireccion(Direccion direccion) {
 		direcciones.add(direccion);
-		direccion.setUsuario(this); //el usuario soy "yo"
+		direccion.setUsuario(this); //el usuario de esta direccion soy "yo"
 	}
 	
 	public void deleteDireccion(Direccion direccion) {
 		direcciones.remove(direccion);
 		direccion.setUsuario(null); //Ningún Usuario asociado con esa direccion
+        
 	}
 	
 	

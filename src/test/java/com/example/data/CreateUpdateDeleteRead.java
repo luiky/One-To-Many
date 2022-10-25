@@ -21,7 +21,7 @@ class CreateUpdateDeleteRead {
 	@Test
 	void contextLoads() {
 		
-		//Create un par de usuarios y le añadimos 2 direcciones  luiky una a lidia.
+		//Crear un par de usuarios y le añadimos 2 direcciones  luiky una a lidia.
 		Usuario usuario01 = new Usuario("Luiky","luiky@unex.es");
 		Usuario usuario02 = new Usuario("Lidia","lidia@gmail.com");
 		
@@ -31,12 +31,16 @@ class CreateUpdateDeleteRead {
 		usuario02.addDireccion(new Direccion("Carrer", "Sabadell"));
 		
 		usuario01 = usuarioRepository.save(usuario01);
-		usuario02 = usuarioRepository.save(usuario02);		
+		usuario02 = usuarioRepository.save(usuario02);
+		
+		//Mostrar el estado de la BD. Todos los usuarios creados.
+		System.out.println("\n\t BD STATE AFTER CREATE:");
+		consultarTodosUsuarios();
 					
 		//Actualizar el email de lidia
 		usuario02.setEmail("LIDIA@UNEX.ES");
 		
-		//Actualizar una direccion de Luiky. Coria a ACEBO. Forma basica directa
+		//Actualizar una direccion de Luiky. Coria a ACEBO. Forma básica directa
 		for (Usuario u: usuarioRepository.findAll()) {
 			if (u.getName()=="Luiky") {
 				for (Direccion d: u.getDirecciones() ) {
@@ -50,14 +54,14 @@ class CreateUpdateDeleteRead {
 		}
 				
 //		//Borrar una dirección de Luiky. la de  Caceres. 
-		//con el orphanRemoval. Deberia borrar la fila
-//		borrarConOrphanRemoval(); //acordarse de cambiarlo en Usuario
+		//orphanRemoval. Opción recomendada en relaciones OneToOne, OneToMany
+		borrarConOrphanRemoval(); 
 
-		//sin orphanRemoval. No deberia borrar la fial
-		borrarSinOrphanRemoval();
+		//Sin orphanRemoval.
+//		borrarSinOrphanRemoval(); //acordarse de cambiarlo en Usuario
 
 		//Debug, consultar todas Direcciones
-		consultarTodasDirecciones();
+		//consultarTodasDirecciones();
 	
 		//Mostrar el estado de la BD. Todos los usuario.
 		consultarTodosUsuarios();
@@ -82,39 +86,41 @@ class CreateUpdateDeleteRead {
 		
 	}
 	
+	//borrado más "natural".
+	void borrarConOrphanRemoval () {
+		//Borrar una dirección de Luiky. la de  Caceres.
+		for (Usuario u: usuarioRepository.findAll()) {
+			if (u.getName()=="Luiky") {
+				for (Direccion d: u.getDirecciones() ) {
+					if (d.getCiudad()=="Caceres") {
+						u.deleteDireccion(d);				
+						usuarioRepository.save(u);
+					}
+				}
+			}
+		}
+		
+	}
+	
 	void borrarSinOrphanRemoval () {
 		
 		//Borrar una dirección de Luiky. la de  Caceres. 
 		for (Usuario u: usuarioRepository.findAll()) {
 			if (u.getName()=="Luiky") {
 				for (Direccion d: u.getDirecciones() ) {
-					if (d.getCiudad()=="Caceres") {						
-						d.setUsuario(null);						
+					if (d.getCiudad()=="Caceres") {																	
 						//System.out.println(u.toString());
+						d.setUsuario(null);
+						//u.deleteDireccion(d); //puede provcar concurrentModification exception
 						usuarioRepository.save(u); //primero guardo el usuario y luego borro la direccion en la tabla
 						direccionRepository.delete(d);	
-							
-						
 					}
 				}
 			}
 		}
 	}
 	
-	void borrarConOrphanRemoval () {
-		//Borrar una dirección de Luiky. la de  Caceres.
-		for (Usuario u: usuarioRepository.findAll()) {
-		if (u.getName()=="Luiky") {
-			for (Direccion d: u.getDirecciones() ) {
-				if (d.getCiudad()=="Caceres") {
-					u.deleteDireccion(d);				
-					usuarioRepository.save(u);
-				}
-			}
-		}
-	}
-		
-	}
+
 	
 
 }
