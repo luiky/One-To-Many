@@ -86,15 +86,15 @@ class CreateUpdateDeleteRead {
 		
 	}
 	
-	//borrado más "natural".
+	//borrado más "natural". Borrado básico directo. 
 	void borrarConOrphanRemoval () {
 		//Borrar una dirección de Luiky. la de  Caceres.
 		for (Usuario u: usuarioRepository.findAll()) {
 			if (u.getName()=="Luiky") {
 				for (Direccion d: u.getDirecciones() ) {
 					if (d.getCiudad()=="Caceres") {
-						u.deleteDireccion(d);				
-						usuarioRepository.save(u);
+						u.deleteDireccion(d);		//puede dar algún problema de acceso concurrente: ConcurrentModificationException		
+						u=usuarioRepository.save(u);
 					}
 				}
 			}
