@@ -46,7 +46,7 @@ class CreateUpdateDeleteRead {
 				for (Direccion d: u.getDirecciones() ) {
 					if (d.getCiudad()=="Coria") {
 						d.setCiudad("ACEBO");
-						usuarioRepository.save(u);
+						u=usuarioRepository.save(u);
 						
 					}
 				}
@@ -60,7 +60,7 @@ class CreateUpdateDeleteRead {
 		//Sin orphanRemoval.
 //		borrarSinOrphanRemoval(); //acordarse de cambiarlo en Usuario
 
-		//Debug, consultar todas Direcciones
+		//Debug: consultar todas Direcciones
 		//consultarTodasDirecciones();
 	
 		//Mostrar el estado de la BD. Todos los usuario.
