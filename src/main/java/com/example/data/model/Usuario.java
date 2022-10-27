@@ -24,8 +24,8 @@ public class Usuario {
 	private String email;
 	
 	//If the relationship is bidirectional, the  mappedBy element must be used to specify  
-	//the property of the entity that is the owner of the relationship (Direccion). 	
-	//Debo proporcionar el atributo:usuario de la entidad propietaria: Direccion en mappedBy.
+	//the property (usuario) of the entity that is the owner of the relationship (Direccion). 	
+	//Debo proporcionar el atributo:usuario de la entidad propietaria: Direccion, en el mappedBy del OneToMany.
 	//
 	//fetch= FetchType.EAGER cargamos todas las direcciones que tenga el usuario inmediatamente. (Necesario para estos tests y ejemplo)
 	//
@@ -35,7 +35,7 @@ public class Usuario {
 	//OrphanRemoval=true: Si el ciclo de vida de la entidad hija (Direccion) está vinculado 
 	//a su padre (Usuario) de manera que el hijo no puede existir sin su padre. 
 	//Entonces podemos anotar la asociación con el atributo orphanRemoval y la disociación del hijo (padre a null) 
-	//desencadenará una sentencia de eliminación en la fila de la tabla hija también
+	//desencadenará una sentencia de eliminación en la fila de la tabla hija
 	
 	@OneToMany (mappedBy ="usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Direccion> direcciones = new HashSet<>();

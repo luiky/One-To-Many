@@ -9,6 +9,14 @@ import com.example.data.model.Usuario;
 import com.example.data.repository.DireccionRepository;
 import com.example.data.repository.UsuarioRepository;
 
+/* 
+ * Exención de responsabilidad (Disclaimer): Usted es el único responsable de determinar la conveniencia de utilizar o redistribuir este código y de asumir cualquier riesgo asociado...
+ * 
+ * Este proyecto está creado para la asignatura MDAI con fines didácticos y para este caso concreto
+ * visto en clase. Las relaciones, sus matizaciones, la prueba realizada y la forma de programarlo 
+ * pueden variar sustancialmente y no tienen porque hacerse de la forma aquí expuesta.
+ * */
+
 @SpringBootTest
 class CreateUpdateDeleteRead {
 
@@ -63,7 +71,7 @@ class CreateUpdateDeleteRead {
 		//Debug: consultar todas Direcciones
 		//consultarTodasDirecciones();
 	
-		//Mostrar el estado de la BD. Todos los usuario.
+		//Mostrar el estado de la BD. Todos los usuarios.
 		consultarTodosUsuarios();
 
 		
@@ -109,9 +117,8 @@ class CreateUpdateDeleteRead {
 			if (u.getName()=="Luiky") {
 				for (Direccion d: u.getDirecciones() ) {
 					if (d.getCiudad()=="Caceres") {																	
-						//System.out.println(u.toString());
-						d.setUsuario(null);
-						//u.deleteDireccion(d); //puede provcar concurrentModification exception
+						//puede provocar concurrentModification exception
+						d.setUsuario(null);	
 						usuarioRepository.save(u); //primero guardo el usuario y luego borro la direccion en la tabla
 						direccionRepository.delete(d);	
 					}
