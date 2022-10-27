@@ -94,7 +94,7 @@ class CreateUpdateDeleteRead {
 		
 	}
 	
-	//borrado más "natural". Borrado básico directo. 
+	//borrado más "natural". Borrado básico directo. RECOMENDADA
 	void borrarConOrphanRemoval () {
 		//Borrar una dirección de Luiky. la de  Caceres.
 		for (Usuario u: usuarioRepository.findAll()) {
