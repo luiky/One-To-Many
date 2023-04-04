@@ -42,7 +42,7 @@ class CreateUpdateDeleteRead {
 		usuario02 = usuarioRepository.save(usuario02);
 		
 		//Mostrar el estado de la BD. Todos los usuarios creados.
-		System.out.println("\n\t BD STATE AFTER CREATE:");
+		System.out.println("\n\t DB STATE AFTER CREATE:");
 		consultarTodosUsuarios();
 					
 		//Actualizar el email de lidia
@@ -50,9 +50,9 @@ class CreateUpdateDeleteRead {
 		
 		//Actualizar una direccion de Luiky. Coria a ACEBO. Forma básica directa
 		for (Usuario u: usuarioRepository.findAll()) {
-			if (u.getName()=="Luiky") {
+			if (u.getName().equals("Luiky")) {
 				for (Direccion d: u.getDirecciones() ) {
-					if (d.getCiudad()=="Coria") {
+					if (d.getCiudad().equals("Coria")) {
 						d.setCiudad("ACEBO");
 						u=usuarioRepository.save(u);
 						
@@ -60,6 +60,8 @@ class CreateUpdateDeleteRead {
 				}
 			}
 		}
+		System.out.println("\n\t DB STATE AFTER UPDATE:");
+		consultarTodosUsuarios();
 				
 //		//Borrar una dirección de Luiky. la de  Caceres. 
 		//orphanRemoval. Opción recomendada en relaciones OneToOne, OneToMany
@@ -67,11 +69,15 @@ class CreateUpdateDeleteRead {
 
 		//Sin orphanRemoval.
 //		borrarSinOrphanRemoval(); //acordarse de cambiarlo en Usuario
-
+				
+		//Debug: borrar el usuario Lidia.
+		//usuarioRepository.delete(usuario02);
+		
 		//Debug: consultar todas Direcciones
 		//consultarTodasDirecciones();
 	
 		//Mostrar el estado de la BD. Todos los usuarios.
+		System.out.println("\n\t DB FINAL STATE:");
 		consultarTodosUsuarios();
 
 		
@@ -94,19 +100,20 @@ class CreateUpdateDeleteRead {
 		
 	}
 	
-	//borrado más "natural". Borrado básico directo. RECOMENDADA
-	void borrarConOrphanRemoval () {
+	//borrado más "natural" con OrphanRemoval. Borrado básico directo. RECOMENDADA
+	//Este método de borrado es bastante mejorable. ¿Como lo mejorarias? 
+	void borrarConOrphanRemoval () {		
 		//Borrar una dirección de Luiky. la de  Caceres.
 		for (Usuario u: usuarioRepository.findAll()) {
-			if (u.getName()=="Luiky") {
+			if (u.getName().equals("Luiky")) {
 				for (Direccion d: u.getDirecciones() ) {
-					if (d.getCiudad()=="Caceres") {
-						u.deleteDireccion(d);		//puede dar algún problema de acceso concurrente: ConcurrentModificationException		
+					if (d.getCiudad().equals("Caceres")) {
+						u.deleteDireccion(d);		//puede dar algún problema de acceso concurrente: ConcurrentModificationException...		
 						u=usuarioRepository.save(u);
 					}
 				}
 			}
-		}
+		}	
 		
 	}
 	
@@ -114,10 +121,10 @@ class CreateUpdateDeleteRead {
 		
 		//Borrar una dirección de Luiky. la de  Caceres. 
 		for (Usuario u: usuarioRepository.findAll()) {
-			if (u.getName()=="Luiky") {
+			if (u.getName().equals("Luiky")) {
 				for (Direccion d: u.getDirecciones() ) {
-					if (d.getCiudad()=="Caceres") {																	
-						//puede provocar concurrentModification exception
+					if (d.getCiudad().equals("Caceres")) {																	
+						//puede provocar concurrentModification exception...
 						d.setUsuario(null);	
 						usuarioRepository.save(u); //primero guardo el usuario y luego borro la direccion en la tabla
 						direccionRepository.delete(d);	
