@@ -1,2 +1,2 @@
 # One-To-Many
- MDAI one to many public example. Spring Boot 2.7.
+ MDAI one to many bidirectional public example.
